@@ -129,4 +129,4 @@ function App() {
   );
 }
 
-exportr default App;
+export default App;
