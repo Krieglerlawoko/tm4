@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { getTasks, createTask, updateTask, deleteTask, signUp, signIn } from './services/taskService';
 import './App.css';
 import Dashboard from './Dashboard';
+import logo from './assets/images/prioritize.png'; // Adjust the import path as needed
 
 function App() {
   const [tasks, setTasks] = useState([]); // State for tasks
@@ -12,15 +13,16 @@ function App() {
   const [password, setPassword] = useState(''); // Password state
   const [formType, setFormType] = useState('signIn'); // State to toggle between signIn and signUp forms
 
-  useEffect(() => {
-    loadTasks();
-  }, [loadTasks], [isAuthenticated]); // Load tasks when authenticated
-
-  const loadTasks = async () => {
-    if (!isAuthenticated) return; // Do not load tasks if not authenticated
+  // Load tasks when authenticated
+  const loadTasks = useCallback(async () => {
+    if (!isAuthenticated) return; // Only load tasks if authenticated
     const fetchedTasks = await getTasks();
     setTasks(fetchedTasks);
-  };
+  }, [isAuthenticated]); // Dependency on isAuthenticated
+
+  useEffect(() => {
+    loadTasks(); // Call loadTasks when isAuthenticated changes
+  }, [loadTasks]); // No need to include isAuthenticated here since it's already a dependency of loadTasks
 
   const handleCreateTask = async () => {
     await createTask(newTask);
@@ -59,6 +61,9 @@ function App() {
   return (
     <div>
       <h1>Task Master</h1>
+    <div className="logo-container">
+      <img src={logo} alt="Logo" className="logo" style={{ width: '150px', marginBottom: '20px' }} /> {/* Display the logo */}
+    </div>
       {isAuthenticated && <Dashboard tasks={tasks} />} {/* Show Dashboard only when authenticated */}
       {!isAuthenticated ? (
         <div>
@@ -124,4 +129,4 @@ function App() {
   );
 }
 
-export default App;
+exportr default App;

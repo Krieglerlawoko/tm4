@@ -176,3 +176,24 @@ button:active {
   width: 0%;
   transition: width 0.5s ease-in-out;
 }
+
+/* Centering the logo */
+.logo-container {
+  display: flex;                  /* Use flexbox for centering */
+  justify-content: center;        /* Center horizontally */
+  align-items: center;            /* Center vertically */
+  margin-bottom: 20px;           /* Spacing below the logo */
+}
+
+/* Logo styling */
+.logo {
+  width: 150px;                  /* Adjust width as needed */
+  height: auto;                  /* Maintain aspect ratio */
+  border-radius: 10px;           /* Add rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  transition: transform 0.2s;    /* Smooth hover effect */
+}
+
+.logo:hover {
+  transform: scale(1.05);        /* Scale up on hover */
+}
