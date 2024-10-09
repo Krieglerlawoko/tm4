@@ -1,15 +1,12 @@
-import axios from 'axios';
+const express = require('express');
+const router = express.Router();
+const { signUp, signIn } = require('../controllers/authController'); // Import controller functions
 
-const API_URL = 'http://localhost:5000/api/auth';
+// Sign up route
+router.post('/api/signup', signUp); // Ensure the route includes '/api'
 
-const signUp = async (userData) => {
-  const response = await axios.post(`${API_URL}/signup`, userData);
-  return response.data;
-};
+// Sign in route
+router.post('/api/signin', signIn); // Ensure the route includes '/api'
 
-const signIn = async (userData) => {
-  const response = await axios.post(`${API_URL}/signin`, userData);
-  return response.data;
-};
-
-export { signUp, signIn };
+// Export the router
+module.exports = router;

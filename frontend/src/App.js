@@ -8,62 +8,92 @@ function App() {
   const [tasks, setTasks] = useState([]); // State for tasks
   const [newTask, setNewTask] = useState({ title: '', description: '', dueDate: '' }); // State for new task
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Auth state
-  const [token, setToken] = useState(null); // Token state
   const [username, setUsername] = useState(''); // Username state
   const [password, setPassword] = useState(''); // Password state
   const [formType, setFormType] = useState('signIn'); // State to toggle between signIn and signUp forms
+  const [token, setToken] = useState(localStorage.getItem('token')); // Initialize token from localStorage
 
   // Load tasks when authenticated
   const loadTasks = useCallback(async () => {
-    if (!isAuthenticated) return; // Only load tasks if authenticated
-    const fetchedTasks = await getTasks();
-    setTasks(fetchedTasks);
-  }, [isAuthenticated]); // Dependency on isAuthenticated
+    if (!isAuthenticated || !token) return; // Only load tasks if authenticated
+    try {
+      const fetchedTasks = await getTasks(token);
+      setTasks(fetchedTasks);
+    } catch (error) {
+      console.error('Failed to load tasks:', error);
+      alert('Error loading tasks. Please try again.'); // Inform the user about the error
+    }
+  }, [isAuthenticated, token]); // Dependency on isAuthenticated
 
   useEffect(() => {
     loadTasks(); // Call loadTasks when isAuthenticated changes
-  }, [loadTasks]); // No need to include isAuthenticated here since it's already a dependency of loadTasks
+  }, [loadTasks]);
 
   const handleCreateTask = async () => {
-    await createTask(newTask);
-    setNewTask({ title: '', description: '', dueDate: '' }); // Clear new task input after creation
-    loadTasks(); // Reload tasks
+    try {
+      await createTask(newTask, token);
+      setNewTask({ title: '', description: '', dueDate: '' }); // Clear new task input after creation
+      loadTasks(); // Reload tasks
+    } catch (error) {
+      console.error('Failed to create task:', error);
+      alert('Error creating task. Please try again.'); // Inform the user about the error
+    }
   };
 
   const handleUpdateTask = async (id, updatedTask) => {
-    await updateTask(id, updatedTask);
-    loadTasks();
+    try {
+      await updateTask(id, updatedTask);
+      loadTasks();
+    } catch (error) {
+      console.error('Failed to update task:', error);
+      alert('Error updating task. Please try again.'); // Inform the user about the error
+    }
   };
 
   const handleDeleteTask = async (id) => {
-    await deleteTask(id);
-    loadTasks();
+    try {
+      await deleteTask(id);
+      loadTasks();
+    } catch (error) {
+      console.error('Failed to delete task:', error);
+      alert('Error deleting task. Please try again.'); // Inform the user about the error
+    }
   };
 
   const handleSignUp = async () => {
-    await signUp({ username, password });
-    alert('User created! You can now sign in.');
-    setFormType('signIn'); // Switch to sign-in form after sign-up
+    try {
+      await signUp({ username, password });
+      alert('User created! You can now sign in.');
+      setFormType('signIn');
+    } catch (error) {
+      const message = error.response?.data?.message || 'Sign-up failed!'; // Use optional chaining
+      alert(message); // Show specific error message
+    }
   };
 
   const handleSignIn = async () => {
-    const data = await signIn({ username, password });
-    if (data.token) {
-      setIsAuthenticated(true);
-      setToken(data.token);
-      localStorage.setItem('token', data.token); // Save token in localStorage
-      loadTasks(); // Load tasks after sign-in
-    } else {
-      alert('Sign-in failed!');
+    try {
+      const data = await signIn({ username, password });
+      if (data.token) {
+        setIsAuthenticated(true);
+        setToken(data.token);
+        localStorage.setItem('token', data.token); // Save token in localStorage
+        loadTasks(); // Load tasks after sign-in
+      } else {
+        alert('Sign-in failed!');
+      }
+    } catch (error) {
+      const message = error.response?.data?.message || 'Sign-in failed!'; // Use optional chaining
+      alert(message); // Show specific error message
     }
   };
 
   return (
     <div>
       <h1>Task Master</h1>
-    <div className="logo-container">
-      <img src={logo} alt="Logo" className="logo" style={{ width: '150px', marginBottom: '20px' }} /> {/* Display the logo */}
-    </div>
+      <div className="logo-container">
+        <img src={logo} alt="Logo" className="logo" style={{ width: '150px', marginBottom: '20px' }} /> {/* Display the logo */}
+      </div>
       {isAuthenticated && <Dashboard tasks={tasks} />} {/* Show Dashboard only when authenticated */}
       {!isAuthenticated ? (
         <div>
@@ -84,7 +114,7 @@ function App() {
             {formType === 'signIn' ? 'Sign In' : 'Sign Up'}
           </button>
           <button onClick={() => setFormType(formType === 'signIn' ? 'signUp' : 'signIn')}>
-            Switch to {formType === 'signIn' ? 'Sign Up' : 'Sign In'}
+           Switch to {formType === 'signIn' ? 'Sign Up' : 'Sign In'}
           </button>
         </div>
       ) : (

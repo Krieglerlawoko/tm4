@@ -1,11 +1,24 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/db');
 
-const TaskSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  status: { type: String, default: 'Pending' },
-  dueDate: { type: Date, required: true },
+// Define the Task model
+const Task = sequelize.define('Task', {
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  status: {
+    type: DataTypes.STRING,
+    defaultValue: 'Pending',
+  },
+  dueDate: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
 });
 
-const Task = mongoose.model('Task', TaskSchema);
 module.exports = Task;
