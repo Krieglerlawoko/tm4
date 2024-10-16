@@ -12,9 +12,17 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middlewares
-app.use(cors({ origin: 'http://localhost:3000' })); // Enable CORS for the frontend
-app.use(express.json()); // Middleware to parse JSON requests
+// CORS configuration to allow requests from your frontend at http://localhost:3000
+app.use(cors({
+  origin: 'http://localhost:3000',  // Frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Allowed HTTP methods
+  credentials: true,  // Allows cookies and authorization headers
+  allowedHeaders: ['Content-Type', 'Authorization'],  // Custom headers you want to allow
+  optionsSuccessStatus: 204  // For legacy browsers (handling of 204 response for OPTIONS request)
+}));
+
+// Middleware to parse JSON requests
+app.use(express.json());
 
 // API Routes
 app.use('/api/auth', authRoutes); // Authentication routes
@@ -24,6 +32,7 @@ app.use('/api/tasks', taskRoutes); // Task management routes
 const startServer = async () => {
   try {
     await connectDB(); // Ensure this connects to your database properly
+    console.log('Database connected successfully'); // Log on successful DB connection
     await sequelize.sync(); // Sync the Sequelize models with the database
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

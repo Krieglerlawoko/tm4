@@ -1,4 +1,4 @@
-const User = require('../models/User'); // Ensure your User model is set up for SQLite
+const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
