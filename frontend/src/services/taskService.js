@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'axios'; // <-- Add this line
 
 const API_URL = 'http://localhost:5000/api';
 
@@ -7,7 +7,6 @@ const signIn = async ({ username, password }) => {
     const response = await axios.post(`${API_URL}/auth/signin`, { username, password });
     return response.data;
   } catch (error) {
-    console.error('Error during sign-in:', error);
     throw error.response ? error.response.data : { message: 'Error signing in' };
   }
 };
@@ -17,7 +16,6 @@ const signUp = async ({ username, password }) => {
     const response = await axios.post(`${API_URL}/auth/signup`, { username, password });
     return response.data;
   } catch (error) {
-    console.error('Error during sign-up:', error);
     throw error.response ? error.response.data : { message: 'Error signing up' };
   }
 };
@@ -29,7 +27,6 @@ const getTasks = async (token) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error fetching tasks:', error);
     throw error.response ? error.response.data : { message: 'Error fetching tasks' };
   }
 };
@@ -41,7 +38,6 @@ const createTask = async (taskData, token) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error creating task:', error);
     throw error.response ? error.response.data : { message: 'Error creating task' };
   }
 };
@@ -53,18 +49,17 @@ const updateTask = async (id, taskData, token) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error updating task:', error);
     throw error.response ? error.response.data : { message: 'Error updating task' };
   }
 };
 
 const deleteTask = async (id, token) => {
   try {
-    await axios.delete(`${API_URL}/tasks/${id}`, {
+    const response = await axios.delete(`${API_URL}/tasks/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+    return response.data;
   } catch (error) {
-    console.error('Error deleting task:', error);
     throw error.response ? error.response.data : { message: 'Error deleting task' };
   }
 };
