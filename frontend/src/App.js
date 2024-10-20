@@ -128,7 +128,6 @@ function App() {
       ) : (
         <div className="task-board">
           <div className="profile-section">
-            <h2>Welcome, {loggedInUser}</h2>
             {userProfilePicture && (
               <img
                 src={`http://localhost:5000/${userProfilePicture}`}
@@ -137,6 +136,7 @@ function App() {
                 style={{ width: '100px', borderRadius: '50%' }}
               />
             )}
+	    <h2>Welcome, {loggedInUser}</h2>  
             <button onClick={handleLogout} className="logout-btn">Logout</button>
           </div>
 
