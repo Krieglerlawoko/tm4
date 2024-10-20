@@ -378,3 +378,7 @@ button:active {
   flex-grow: 1;
 }
 
+
+h2 {
+  margin: 0; /* Remove default margin from the heading */
+}
