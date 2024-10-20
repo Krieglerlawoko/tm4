@@ -1,4 +1,4 @@
-import axios from 'axios'; // <-- Add this line
+import axios from 'axios';
 
 const API_URL = 'http://localhost:5000/api';
 
@@ -11,9 +11,11 @@ const signIn = async ({ username, password }) => {
   }
 };
 
-const signUp = async ({ username, password }) => {
+const signUp = async (formData) => {
   try {
-    const response = await axios.post(`${API_URL}/auth/signup`, { username, password });
+    const response = await axios.post(`${API_URL}/auth/signup`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
     return response.data;
   } catch (error) {
     throw error.response ? error.response.data : { message: 'Error signing up' };

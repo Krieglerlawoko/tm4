@@ -1,33 +1,42 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+
+// Multer storage configuration for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Where to store uploaded images
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`); // Name format for images
+  },
+});
+
+const upload = multer({ storage });
 
 // Sign Up
 const signUp = async (req, res) => {
   const { username, password } = req.body;
+  const profilePicture = req.file ? req.file.path : null;
 
-  // Input validation
   if (!username || !password) {
     return res.status(400).json({ message: 'Username and password are required.' });
   }
 
   try {
-    // Check if the user already exists
     const existingUser = await User.findOne({ where: { username } });
     if (existingUser) {
       return res.status(400).json({ message: 'Username already taken.' });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await User.create({ username, password: hashedPassword, profilePicture });
 
-    // Create the new user
-    const newUser = await User.create({ username, password: hashedPassword });
-
-    // Return the new user info (without password)
     const userResponse = {
       id: newUser.id,
       username: newUser.username,
+      profilePicture: newUser.profilePicture,
       createdAt: newUser.createdAt,
       updatedAt: newUser.updatedAt,
     };
@@ -42,29 +51,25 @@ const signUp = async (req, res) => {
 const signIn = async (req, res) => {
   const { username, password } = req.body;
 
-  // Input validation
   if (!username || !password) {
     return res.status(400).json({ message: 'Username and password are required.' });
   }
 
   try {
-    // Find the user by username
     const user = await User.findOne({ where: { username } });
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    // Compare the passwords
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
 
-    // Create a JWT token
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    // Return the token and user information (without password)
     res.status(200).json({
       token,
       user: {
         id: user.id,
         username: user.username,
+        profilePicture: user.profilePicture, // Send profile picture in the response
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
       },
@@ -74,4 +79,17 @@ const signIn = async (req, res) => {
   }
 };
 
-module.exports = { signUp, signIn };
+// Upload Profile Picture
+const uploadProfilePicture = async (req, res) => {
+  const userId = req.user.id; // Assuming there's a middleware that verifies the token
+  const filePath = req.file.path;
+
+  try {
+    await User.update({ profilePicture: filePath }, { where: { id: userId } });
+    res.status(200).json({ message: 'Profile picture uploaded successfully!', filePath });
+  } catch (err) {
+    res.status(500).json({ message: 'Error uploading profile picture', error: err.message });
+  }
+};
+
+module.exports = { signUp, signIn, uploadProfilePicture };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { getTasks, createTask, updateTask, deleteTask, signUp, signIn } from './services/taskService';
 import './App.css';
-import logo from './assets/images/prioritize.png'; // Adjust the import path as needed
+import logo from './assets/images/prioritize.png';
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -10,10 +10,11 @@ function App() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [formType, setFormType] = useState('signIn');
+  const [profilePicture, setProfilePicture] = useState(null); // Profile picture state
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loggedInUser, setLoggedInUser] = useState(localStorage.getItem('username') || '');
+  const [userProfilePicture, setUserProfilePicture] = useState(''); // User profile picture
 
-  // Function to load tasks from the backend
   const loadTasks = useCallback(async () => {
     if (!isAuthenticated || !token) return;
     const fetchedTasks = await getTasks(token);
@@ -24,24 +25,23 @@ function App() {
     loadTasks();
   }, [loadTasks]);
 
-  // Task creation function
   const handleCreateTask = async () => {
-    await createTask(newTask, token); // Pass token to createTask service function
-    setNewTask({ title: '', description: '', dueDate: '' }); // Clear form after submission
-    loadTasks(); // Reload tasks
+    await createTask(newTask, token);
+    setNewTask({ title: '', description: '', dueDate: '' });
+    loadTasks();
   };
 
-  // Sign-in function
   const handleSignIn = async () => {
     try {
       const data = await signIn({ username, password });
       if (data.token) {
         setIsAuthenticated(true);
-        setToken(data.token); // Save token
-        localStorage.setItem('token', data.token); // Persist token in local storage
-        localStorage.setItem('username', data.user.username); // Save username
-        setLoggedInUser(data.user.username); // Set logged in user
-        loadTasks(); // Fetch tasks after sign-in
+        setToken(data.token);
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('username', data.user.username);
+        setLoggedInUser(data.user.username);
+        setUserProfilePicture(data.user.profilePicture); // Set profile picture
+        loadTasks();
       } else {
         alert('Sign-in failed');
       }
@@ -51,13 +51,17 @@ function App() {
     }
   };
 
-  // Sign-up function
   const handleSignUp = async () => {
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('password', password);
+    if (profilePicture) formData.append('profilePicture', profilePicture);
+
     try {
-      const data = await signUp({ username, password });
+      const data = await signUp(formData);
       if (data.message === 'User created!') {
         alert('Sign-up successful, please sign in.');
-        setFormType('signIn'); // Automatically switch to the sign-in form
+        setFormType('signIn');
       } else {
         alert('Sign-up failed');
       }
@@ -67,7 +71,6 @@ function App() {
     }
   };
 
-  // Logout function
   const handleLogout = () => {
     setIsAuthenticated(false);
     setToken(null);
@@ -77,13 +80,11 @@ function App() {
     setTasks([]);
   };
 
-  // Handle task update (Mark as completed)
   const handleUpdateTask = async (id, updatedTask) => {
     await updateTask(id, updatedTask, token);
     loadTasks();
   };
 
-  // Handle task deletion
   const handleDeleteTask = async (id) => {
     await deleteTask(id, token);
     loadTasks();
@@ -111,6 +112,12 @@ function App() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          {formType === 'signUp' && (
+            <input
+              type="file"
+              onChange={(e) => setProfilePicture(e.target.files[0])} // Profile picture input
+            />
+          )}
           <button onClick={formType === 'signIn' ? handleSignIn : handleSignUp}>
             {formType === 'signIn' ? 'Sign In' : 'Sign Up'}
           </button>
@@ -120,8 +127,18 @@ function App() {
         </div>
       ) : (
         <div className="task-board">
-          <h2>Welcome, {loggedInUser}</h2>
-          <button onClick={handleLogout} className="logout-btn">Logout</button>
+          <div className="profile-section">
+            <h2>Welcome, {loggedInUser}</h2>
+            {userProfilePicture && (
+              <img
+                src={`http://localhost:5000/${userProfilePicture}`}
+                alt="Profile"
+                className="profile-picture"
+                style={{ width: '100px', borderRadius: '50%' }}
+              />
+            )}
+            <button onClick={handleLogout} className="logout-btn">Logout</button>
+          </div>
 
           <div className="task-form">
             <input
