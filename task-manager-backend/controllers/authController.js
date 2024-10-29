@@ -6,10 +6,10 @@ const multer = require('multer');
 // Multer storage configuration for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Where to store uploaded images
+    cb(null, 'uploads/'); // Where uploaded images are stored
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`); // Name format for images
+    cb(null, `${Date.now()}-${file.originalname}`);
   },
 });
 
@@ -69,7 +69,7 @@ const signIn = async (req, res) => {
       user: {
         id: user.id,
         username: user.username,
-        profilePicture: user.profilePicture, // Send profile picture in the response
+        profilePicture: user.profilePicture, // Send profile picture in response
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
       },
@@ -81,7 +81,7 @@ const signIn = async (req, res) => {
 
 // Upload Profile Picture
 const uploadProfilePicture = async (req, res) => {
-  const userId = req.user.id; // Assuming there's a middleware that verifies the token
+  const userId = req.user.id;
   const filePath = req.file.path;
 
   try {

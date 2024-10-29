@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db');
 
-// Define the User model
+// User model
 const User = sequelize.define('User', {
   username: {
     type: DataTypes.STRING(50),
@@ -22,7 +22,7 @@ const User = sequelize.define('User', {
   },
   profilePicture: {
     type: DataTypes.STRING,
-    allowNull: true, // Profile picture is optional
+    allowNull: true, // Profile picture optional
   },
 }, {
   tableName: 'users',

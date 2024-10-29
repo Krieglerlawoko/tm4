@@ -115,27 +115,27 @@ input {
 }
 
 input:focus {
-  border-color: #007bff; /* Change to a blue border on focus */
+  border-color: #007bff;
 }
 
 button {
-  background-color: #007bff; /* Bootstrap primary color */
+  background-color: #007bff;
   color: white;
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s; /* Smooth transition for background color and transform */
-  margin-right: 10px; /* Space between buttons */
+  transition: background-color 0.3s, transform 0.2s;
+  margin-right: 10px;
 }
 
 button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #0056b3;
 }
 
 button:active {
-  transform: scale(0.95); /* Slightly shrink the button on click */
-  background-color: #004494; /* Even darker blue when clicked */
+  transform: scale(0.95);
+  background-color: #004494;
 }
 
 .task {
@@ -179,29 +179,27 @@ button:active {
 
 /* Centering the logo */
 .logo-container {
-  display: flex;                  /* Use flexbox for centering */
-  justify-content: center;        /* Center horizontally */
-  align-items: center;            /* Center vertically */
-  margin-bottom: 20px;           /* Spacing below the logo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 /* Logo styling */
 .logo {
-  width: 150px;                  /* Adjust width as needed */
-  height: auto;                  /* Maintain aspect ratio */
-  border-radius: 10px;           /* Add rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-  transition: transform 0.2s;    /* Smooth hover effect */
+  width: 150px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
 }
 
 .logo:hover {
-  transform: scale(1.05);        /* Scale up on hover */
+  transform: scale(1.05);
 }
 
-/* App.css */
-
 .app-container {
-  max-width: 800px;
+  max-width: 80%;
   margin: 0 auto;
   text-align: center;
 }
@@ -238,9 +236,9 @@ button:active {
   background-color: #f8f8f8;
   border-radius: 8px;
   padding: 15px;
-  margin: 15px 0;
+  margin: 15px 2px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  flex: 1 0 30%; /* 3 cards per row */
+  flex: 1 0 30%;
   display: flex;
   flex-direction: column;
 }
@@ -282,7 +280,7 @@ button:active {
 }
 
 .col-4 {
-  flex: 1 1 30%; /* Adjust this for number of columns */
+  flex: 1 1 30%;
 }
 
 .profile-section {
@@ -296,7 +294,7 @@ button:active {
   height: 80px;
   border-radius: 50%;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  object-fit: cover; /* Ensures the image covers the area while keeping its aspect ratio */
+  object-fit: cover;
   margin-right: 15px;
 }
 
@@ -326,22 +324,22 @@ button:active {
 
 .profile-section {
   display: flex;
-  justify-content: space-between; /* Space between profile details and logout button */
+  justify-content: space-between;
   align-items: center;
   padding: 10px;
   margin-bottom: 20px;
-  background-color: #f5f5f5; /* Optional: Add a light background to the profile section */
-  border-radius: 8px; /* Slight rounding to the profile section */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Adds a slight shadow for depth */
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .profile-picture {
   width: 80px;
   height: 80px;
-  border-radius: 50%; /* Ensures a perfect circle */
+  border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #e0e0e0; /* Light grey border for a subtle and professional look */
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Softer shadow for a clean 3D effect */
+  border: 2px solid #e0e0e0;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   margin-right: 20px;
 }
 
@@ -380,5 +378,5 @@ button:active {
 
 
 h2 {
-  margin: 0; /* Remove default margin from the heading */
+  margin: 0;
 }

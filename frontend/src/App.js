@@ -13,7 +13,7 @@ function App() {
   const [profilePicture, setProfilePicture] = useState(null); // Profile picture state
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loggedInUser, setLoggedInUser] = useState(localStorage.getItem('username') || '');
-  const [userProfilePicture, setUserProfilePicture] = useState(''); // User profile picture
+  const [userProfilePicture, setUserProfilePicture] = useState(''); // Profile picture
 
   const loadTasks = useCallback(async () => {
     if (!isAuthenticated || !token) return;
@@ -40,7 +40,7 @@ function App() {
         localStorage.setItem('token', data.token);
         localStorage.setItem('username', data.user.username);
         setLoggedInUser(data.user.username);
-        setUserProfilePicture(data.user.profilePicture); // Set profile picture
+        setUserProfilePicture(data.user.profilePicture); // Sets `profile picture
         loadTasks();
       } else {
         alert('Sign-in failed');
