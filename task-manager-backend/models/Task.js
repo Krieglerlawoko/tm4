@@ -19,6 +19,10 @@ const Task = sequelize.define('Task', {
     type: DataTypes.DATE,
     allowNull: false,
   },
+  userId: { // Add userId field to associate tasks with users
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 });
 
 module.exports = Task;
