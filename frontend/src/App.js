@@ -136,7 +136,7 @@ function App() {
                 style={{ width: '100px', borderRadius: '50%' }}
               />
             )}
-	    <h2 style={{ margin: '0' }}>Welcome, {loggedInUser}</h2>  
+	    <h2>Welcome, {loggedInUser}</h2>  
             <button onClick={handleLogout} className="logout-btn">Logout</button>
           </div>
 
