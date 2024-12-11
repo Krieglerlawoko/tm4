@@ -1,5 +1,8 @@
+const jwt = require('jsonwebtoken');
+
 const authMiddleware = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1]; // Get token from Authorization header
+  console.log('Auth Middleware triggered');
+  const token = req.headers.authorization?.split(' ')[1];
   if (!token) {
     return res.status(403).json({ message: 'No token provided' });
   }
@@ -9,7 +12,9 @@ const authMiddleware = (req, res, next) => {
       console.error('Token verification failed:', err);
       return res.status(401).json({ message: 'Unauthorized' });
     }
-    req.user = decoded; // Set the user information
+    req.user = decoded;
     next();
   });
 };
+
+module.exports = authMiddleware;

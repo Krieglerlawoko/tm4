@@ -1,0 +1,10 @@
+{
+  "development": {
+    "username": "taskMaster",
+    "password": "taskMaster",
+    "database": "db",
+    "host": "127.0.0.1",
+    "dialect": "sqlite",
+    "storage": "./database/taskmanager.sqlite"
+  }
+}

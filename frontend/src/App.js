@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { getTasks, createTask, updateTask, deleteTask, signUp, signIn } from './services/taskService';
+import { getTasks, createTask, updateTask, deleteTask, signUp, signIn, deleteAccount } from './services/taskService';
 import './App.css';
 import logo from './assets/images/prioritize.png';
 
@@ -90,6 +90,18 @@ function App() {
     loadTasks();
   };
 
+  const handleDeleteAccount = async () => {
+    if (window.confirm("Are you sure you want to delete your account?")) {
+      try {
+        await deleteAccount(token); // Call the API to delete the account
+        alert("Account deleted successfully.");
+        handleLogout(); // Log the user out after account deletion
+      } catch (error) {
+        alert(error.message || "Error deleting account.");
+      }
+    }
+  };
+
   return (
     <div className="app-container">
       <h1>Task Master</h1>
@@ -136,8 +148,9 @@ function App() {
                 style={{ width: '100px', borderRadius: '50%' }}
               />
             )}
-	    <h2>Welcome, {loggedInUser}</h2>  
+            <h2>Welcome, {loggedInUser}</h2>
             <button onClick={handleLogout} className="logout-btn">Logout</button>
+            <button onClick={handleDeleteAccount} className="delete-account-btn">Delete Account</button>
           </div>
 
           <div className="task-form">

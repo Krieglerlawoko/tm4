@@ -66,4 +66,15 @@ const deleteTask = async (id, token) => {
   }
 };
 
-export { signIn, signUp, getTasks, createTask, updateTask, deleteTask };
+const deleteAccount = async (token) => {
+  try {
+    const response = await axios.delete(`${API_URL}/auth/delete-account`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : { message: 'Error deleting account' };
+  }
+};
+
+export { signIn, signUp, getTasks, createTask, updateTask, deleteTask, deleteAccount };

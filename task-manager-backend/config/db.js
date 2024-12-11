@@ -8,7 +8,7 @@ dotenv.config();
 // Create a new SQLite database connection
 const sequelize = new Sequelize({
   dialect: 'sqlite',
-  storage: process.env.DB_PATH || path.join(__dirname, '../database/taskmanager.sqlite') // SQLite database file path
+  storage: process.env.DB_PATH || path.join(__dirname, '../database/taskmanager.sqlite'), // SQLite database file path
 });
 
 // Test the connection and log success/failure

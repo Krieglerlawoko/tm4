@@ -1,7 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db');
 
-// Task model
 const Task = sequelize.define('Task', {
   title: {
     type: DataTypes.STRING,
@@ -19,10 +18,16 @@ const Task = sequelize.define('Task', {
     type: DataTypes.DATE,
     allowNull: false,
   },
-  userId: { // Add userId field to associate tasks with users
+  userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    references: {
+      model: 'users',
+      key: 'id',
+      onDelete: 'CASCADE',
+    },
   },
 });
 
+// Export the model
 module.exports = Task;

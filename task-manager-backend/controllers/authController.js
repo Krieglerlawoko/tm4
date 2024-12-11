@@ -92,4 +92,14 @@ const uploadProfilePicture = async (req, res) => {
   }
 };
 
-module.exports = { signUp, signIn, uploadProfilePicture };
+const deleteUser = async (req, res) => {
+  try {
+    const userId = req.user.id; // Retrieve user ID from the token
+    await User.destroy({ where: { id: userId } }); // Delete the user from DB
+    res.status(200).json({ message: "User account deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting account", error: error.message });
+  }
+};
+
+module.exports = { signUp, signIn, uploadProfilePicture, deleteUser };
